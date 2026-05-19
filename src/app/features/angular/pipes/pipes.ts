@@ -17,8 +17,10 @@ export class TruncatePipe implements PipeTransform {
 @Pipe({ name: 'highlight', standalone: true })
 export class HighlightPipe implements PipeTransform {
   transform(value: string, search: string): string {
-    if (!search.trim()) return value;
-    const re = new RegExp(`(${search})`, 'gi');
+    const trimmed = search.trim();
+    if (!trimmed || trimmed.length > 100) return value;
+    const escaped = trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`(${escaped})`, 'gi');
     return value.replace(re, '<mark>$1</mark>');
   }
 }
