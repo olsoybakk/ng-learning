@@ -80,17 +80,59 @@ export class CodeBlockComponent {
   }
 
   private highlight(code: string): string {
-    const escaped = code
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-    return escaped
-      .replace(/(\/\/[^\n]*)/g, '<span class="cm">$1</span>')
-      .replace(/\b(import|export|from|const|let|var|function|return|class|extends|implements|interface|type|enum|async|await|new|this|true|false|null|undefined|void|if|else|for|of|in|switch|case|break|default|throw|try|catch|finally|public|private|protected|readonly|static|abstract|override|declare|namespace|module|require|typeof|instanceof|keyof|infer|never|any|string|number|boolean|object|unknown|@)\b/g, '<span class="kw">$1</span>')
-      .replace(/(@\w+)/g, '<span class="dec">$1</span>')
-      .replace(/\b([A-Z][A-Za-z0-9]*)\b/g, '<span class="cls">$1</span>')
-      .replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, '<span class="str">$1</span>')
-      .replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="num">$1</span>');
+    const keywords = new Set([
+      'import','export','from','const','let','var','function','return','class',
+      'extends','implements','interface','type','enum','async','await','new','this',
+      'true','false','null','undefined','void','if','else','for','of','in','switch',
+      'case','break','default','throw','try','catch','finally','public','private',
+      'protected','readonly','static','abstract','override','declare','namespace',
+      'module','require','typeof','instanceof','keyof','infer','never','any',
+      'string','number','boolean','object','unknown',
+    ]);
+
+    const rules: [RegExp, string][] = [
+      [/\/\/[^\n]*/, 'cm'],
+      [/`(?:[^`\\]|\\.)*`/, 'str'],
+      [/"(?:[^"\\]|\\.)*"/, 'str'],
+      [/'(?:[^'\\]|\\.)*'/, 'str'],
+      [/@\w+/, 'dec'],
+      [/\b\d+(?:\.\d+)?\b/, 'num'],
+      [/\b[A-Za-z_$][\w$]*\b/, ''],
+    ];
+
+    let out = '';
+    let rest = code;
+
+    while (rest.length) {
+      let best: { idx: number; token: string; cls: string } | null = null;
+
+      for (const [re, cls] of rules) {
+        const m = re.exec(rest);
+        if (m && (best === null || m.index < best.idx)) {
+          best = { idx: m.index, token: m[0], cls };
+        }
+      }
+
+      if (!best) { out += esc(rest); break; }
+
+      out += esc(rest.slice(0, best.idx));
+
+      let cls = best.cls;
+      if (cls === '') {
+        if (keywords.has(best.token)) cls = 'kw';
+        else if (/^[A-Z]/.test(best.token)) cls = 'cls';
+      }
+
+      out += cls
+        ? `<span class="${cls}">${esc(best.token)}</span>`
+        : esc(best.token);
+
+      rest = rest.slice(best.idx + best.token.length);
+    }
+
+    return out;
   }
 }
