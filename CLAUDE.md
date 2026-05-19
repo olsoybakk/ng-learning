@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**NgLearning** is an interactive Angular 21.2 learning application with live demos for Angular features and RxJS patterns. It is structured as a standalone-component SPA with lazy-loaded feature routes organized into two categories: Angular topics and RxJS topics.
+**NgLearning** is an interactive Angular 21.2 learning application with live demos for Angular features, RxJS patterns, and Angular Material components. It is structured as a standalone-component SPA with lazy-loaded feature routes organized into three categories: Angular, RxJS, and Angular Material.
 
 ## Commands
 
@@ -49,6 +49,14 @@ All styling uses CSS custom properties defined in `src/styles.scss` under `:root
 - Typography: `--text`, `--text-muted`, `--font-mono`
 
 Global utility classes in `styles.scss`: `.btn-primary/secondary/success/danger`, `.controls`, `.output-box`, `.output-line`, `.page-header`, `.grid-2`, `.mt-1/.mt-2`.
+
+### Dark / light mode
+
+`App` holds a `darkMode` signal (default `true`). An `effect()` toggles the `light` class on `document.documentElement` and persists the choice to `localStorage` under the key `theme`.
+
+- **Dark theme**: defined on `:root` in `styles.scss`
+- **Light theme**: overrides on `html.light` — CSS custom properties + a second `mat.define-theme(theme-type: light)` applied via `@include mat.all-component-themes($light-theme)`
+- **Code-block syntax tokens** use `--code-*` custom properties (`--code-bg`, `--code-kw`, `--code-fn`, `--code-str`, `--code-num`, `--code-cm`, `--code-cls`, `--code-dec`, `--code-op`). Dark values are Dracula-inspired; light values are a high-contrast palette (vivid red, purple, dark green, bright blue, amber) defined in the `html.light` block.
 
 ## Angular Material
 
