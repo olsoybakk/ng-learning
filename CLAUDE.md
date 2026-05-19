@@ -79,6 +79,17 @@ Material Icons font is loaded in `index.html` (ligature-based, classic icon set)
 - `MatSlider` in M3 uses `<input matSliderThumb />` inside `<mat-slider>` for single thumb, and `matSliderStartThumb` / `matSliderEndThumb` for range.
 - The material section uses `FormsModule` (for `ngModel` on mat-checkbox, mat-slide-toggle) alongside `ReactiveFormsModule`.
 
+## Deployment
+
+The app is deployed to **https://olsoybakk.github.io/ng-learning/** via GitHub Actions on every push to `master`.
+
+Workflow: `.github/workflows/deploy.yml`
+- Builds with `--base-href /ng-learning/` so all asset paths are rooted correctly
+- Copies `index.html` → `404.html` so GitHub Pages serves the Angular app for direct route navigation (SPA routing fix)
+- Uploads `dist/ng-learning/browser` via `actions/upload-pages-artifact` and deploys with `actions/deploy-pages`
+
+To build locally with the same base href: `npm run build -- --base-href /ng-learning/`
+
 ## Testing
 
 Uses Vitest via Angular's `@angular/build:unit-test` builder (no separate `vitest.config.ts`). Tests live alongside source as `*.spec.ts`.

@@ -1,6 +1,10 @@
 # Angular & RxJS Learning Lab
 
+[![Deploy to GitHub Pages](https://github.com/olsoybakk/ng-learning/actions/workflows/deploy.yml/badge.svg)](https://github.com/olsoybakk/ng-learning/actions/workflows/deploy.yml)
+
 An interactive learning application showcasing modern Angular 21, RxJS, and Angular Material patterns through live demos and annotated code examples.
+
+**Live demo → [olsoybakk.github.io/ng-learning](https://olsoybakk.github.io/ng-learning/)**
 
 ## Topics covered
 
@@ -37,3 +41,4 @@ npm test        # Vitest unit tests
 | Tests | Vitest via `@angular/build:unit-test` |
 | Styling | SCSS + CSS custom properties, dark/light theme |
 | Build | Esbuild via `@angular/build:application` |
+| Deploy | GitHub Actions → GitHub Pages |
