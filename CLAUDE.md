@@ -94,6 +94,10 @@ To build locally with the same base href: `npm run build -- --base-href /ng-lear
 
 Uses Vitest via Angular's `@angular/build:unit-test` builder (no separate `vitest.config.ts`). Tests live alongside source as `*.spec.ts`.
 
+### Browser testing (Playwright MCP)
+
+A Playwright MCP server is configured in `.mcp.json`. With it active, use tools like `playwright_navigate`, `playwright_screenshot`, `playwright_click`, and `playwright_evaluate` to visually verify the running app at `http://localhost:4200`. Start the dev server first with `npm start`.
+
 ## Notes
 
 - No ESLint configured; TypeScript strict mode is the primary guard.

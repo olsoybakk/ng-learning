@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, computed, effect, linkedSignal, signal, OnDestroy } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { interval, Subject, takeUntil } from 'rxjs';
@@ -47,7 +47,10 @@ import { FormsModule } from '@angular/forms';
           <input [(ngModel)]="searchInput" (ngModelChange)="searchTerm.set($event)" placeholder="Type to trigger effect..." style="flex:1" />
         </div>
         <div class="output-box mt-1">
-          @for (log of effectLog; track $index) {
+          @if (effectLog().length === 0) {
+            <div style="color:var(--text-muted)">Type something to see effect logs…</div>
+          }
+          @for (log of effectLog(); track $index) {
             <div class="output-line">{{ log }}</div>
           }
         </div>
@@ -91,7 +94,7 @@ import { FormsModule } from '@angular/forms';
     }
   `]
 })
-export class SignalsComponent implements OnInit, OnDestroy {
+export class SignalsComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
   // signal()
@@ -108,7 +111,7 @@ export class SignalsComponent implements OnInit, OnDestroy {
   // effect()
   searchInput = '';
   searchTerm = signal('');
-  effectLog: string[] = [];
+  effectLog = signal<string[]>([]);
 
   // toSignal / toObservable
   timer = toSignal(interval(1000).pipe(map(i => i + 1)), { initialValue: 0 });
@@ -125,24 +128,19 @@ export class SignalsComponent implements OnInit, OnDestroy {
   category = signal('Fruits');
   itemsForCategory = computed(() => this.itemsMap[this.category()]);
   // linkedSignal resets to first item whenever category changes
-  selectedItem = signal(this.itemsMap['Fruits'][0]);
+  selectedItem = linkedSignal(() => this.itemsForCategory()[0]);
 
   constructor() {
     effect(() => {
       const term = this.searchTerm();
       if (term) {
-        this.effectLog = [`[${new Date().toLocaleTimeString()}] Searched: "${term}"`, ...this.effectLog.slice(0, 4)];
+        this.effectLog.update(log => [
+          `[${new Date().toLocaleTimeString()}] Searched: "${term}"`,
+          ...log.slice(0, 4),
+        ]);
       }
     });
 
-    // Reset selectedItem when category changes
-    effect(() => {
-      const items = this.itemsForCategory();
-      this.selectedItem.set(items[0]);
-    });
-  }
-
-  ngOnInit() {
     toObservable(this.count).pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.obsEmissions++;
     });
