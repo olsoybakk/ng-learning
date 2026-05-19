@@ -1,0 +1,52 @@
+<div class="app-layout">
+  <aside class="sidebar" [class.collapsed]="!sidebarOpen()">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        @if (sidebarOpen()) {
+          <span class="logo-text">Angular &amp; RxJS Lab</span>
+        }
+      </div>
+      <button class="toggle-btn" (click)="sidebarOpen.set(!sidebarOpen())">
+        {{ sidebarOpen() ? '◂' : '▸' }}
+      </button>
+    </div>
+
+    <nav class="sidebar-nav scrollbar-thin">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-home">
+        <span>🏠</span>
+        @if (sidebarOpen()) { <span>Home</span> }
+      </a>
+
+      @for (group of navGroups; track group.title) {
+        <div class="nav-group">
+          @if (sidebarOpen()) {
+            <div class="nav-group-title">
+              <span class="tag" [class]="group.tag">{{ group.title }}</span>
+            </div>
+          }
+          @for (item of group.items; track item.path) {
+            <a
+              [routerLink]="item.path"
+              routerLinkActive="active"
+              class="nav-item"
+            >
+              <span class="nav-icon">{{ item.icon }}</span>
+              @if (sidebarOpen()) {
+                <span>{{ item.label }}</span>
+              }
+            </a>
+          }
+        </div>
+      }
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>
+
+<button class="theme-fab" (click)="darkMode.set(!darkMode())" [title]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+  {{ darkMode() ? '🌙' : '☀️' }}
+</button>
