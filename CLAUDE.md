@@ -29,7 +29,7 @@ src/app/
 │   │               # error-handling, multicasting, custom-operators
 │   └── material/   # buttons, form-controls, data-display, navigation, overlays
 └── shared/components/
-    ├── code-block/ # Syntax-highlighted code display with copy button (regex-based, no external lib)
+    ├── code-block/ # Syntax-highlighted code display with copy button (single-pass regex tokenizer, no external lib)
     └── demo-card/  # Card wrapper using ng-content
 ```
 
@@ -54,8 +54,8 @@ Global utility classes in `styles.scss`: `.btn-primary/secondary/success/danger`
 
 `App` holds a `darkMode` signal (default `true`). An `effect()` toggles the `light` class on `document.documentElement` and persists the choice to `localStorage` under the key `theme`.
 
-- **Dark theme**: defined on `:root` in `styles.scss`
-- **Light theme**: overrides on `html.light` — CSS custom properties + a second `mat.define-theme(theme-type: light)` applied via `@include mat.all-component-themes($light-theme)`
+- **Dark theme**: defined on `:root` in `styles.scss`; includes `color-scheme: dark` so browser-native form controls (inputs, selects) render dark
+- **Light theme**: overrides on `html.light` — CSS custom properties + a second `mat.define-theme(theme-type: light)` applied via `@include mat.all-component-themes($light-theme)`; includes `color-scheme: light`
 - **Code-block syntax tokens** use `--code-*` custom properties (`--code-bg`, `--code-kw`, `--code-fn`, `--code-str`, `--code-num`, `--code-cm`, `--code-cls`, `--code-dec`, `--code-op`). Dark values are Dracula-inspired; light values are a high-contrast palette (vivid red, purple, dark green, bright blue, amber) defined in the `html.light` block.
 
 ## Angular Material
