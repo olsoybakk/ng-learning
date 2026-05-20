@@ -1,4 +1,4 @@
-# Angular & RxJS Learning Lab
+# Angular, RxJS & Material Learning Lab
 
 [![Deploy to GitHub Pages](https://github.com/olsoybakk/ng-learning/actions/workflows/deploy.yml/badge.svg)](https://github.com/olsoybakk/ng-learning/actions/workflows/deploy.yml)
 

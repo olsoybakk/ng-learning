@@ -7,8 +7,8 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   template: `
     <div class="page-header">
-      <h1>Angular & RxJS Learning Lab</h1>
-      <p>Interactive examples and demos showcasing modern Angular and RxJS patterns.</p>
+      <h1>Angular, RxJS & Material Learning Lab</h1>
+      <p>Interactive examples and demos showcasing modern Angular, RxJS, and Angular Material patterns.</p>
     </div>
 
     <div class="section">
