@@ -45,3 +45,10 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+/.prettierrc
+/.mcp.json
+/.editorconfig
+/.vscode/mcp.json
+/.vscode/extensions.json
+/.vscode/launch.json
+/.vscode/tasks.json
